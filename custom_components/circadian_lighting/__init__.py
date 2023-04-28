@@ -57,6 +57,9 @@ from homeassistant.util.color import (
     color_temperature_to_rgb,
     color_xy_to_hs,
 )
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 DOMAIN = "circadian_lighting"
 CIRCADIAN_LIGHTING_UPDATE_TOPIC = f"{DOMAIN}_update"
@@ -287,6 +290,9 @@ class CircadianLighting:
                 if now_ts < today[SUN_EVENT_MIDNIGHT]
                 else today[SUN_EVENT_SUNRISE]
             )
+        else:
+            _LOGGER.error('Calc percentage failed. now: %s, now_ts: %s, today: %s', now, now_ts, today)
+            return 0
 
         y = 0
         a = (y - k) / (h - x) ** 2
